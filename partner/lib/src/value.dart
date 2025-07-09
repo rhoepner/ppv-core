@@ -1,3 +1,7 @@
+mixin JsonName {
+  String jsonName();
+}
+
 abstract class Value<T> {
   T? _initial;
   T? _changed;
@@ -27,6 +31,12 @@ abstract class Value<T> {
       _initial = value;
     } else {
       _changed = value;
+    }
+  }
+
+  void update (T? value) {
+    if (value is T) {
+      
     }
   }
 
@@ -63,3 +73,25 @@ abstract class StringValue extends Value<String> {
     }
   }
 }
+
+abstract class IntValue extends Value<int> {
+  
+  @override
+  int absentValue() {
+    return 0;
+  }
+
+  @override
+  void fromJson(Map<String, dynamic> json) {
+    if (json.containsKey(jsonName())) {
+      var jsonValue = json[jsonName()];
+      if (jsonValue is int)   {
+        value = jsonValue;
+      } 
+    }
+  }
+}
+
+
+
+
