@@ -5,6 +5,9 @@ class UnitOfWork {
     sources.add(source);
   }
 
+  bool isDirty() {
+    return sources.isNotEmpty;
+  }
 }
 
 mixin Source {
