@@ -1,5 +1,6 @@
 import 'package:partner/partner.dart';
 import 'package:partner/src/geschlecht.dart';
+import 'package:partner/src/unit_of_work.dart';
 import 'package:test/test.dart';
 
 void main() {
@@ -16,14 +17,17 @@ void main() {
       expect(partner.geschlecht, Geschlecht.unbekannt);
     });
 
-    test('Mutate', () {
-      var mut = PartnerMut(
-        vorname: "Reinhard"
+    test('Change State', () {
+      var uow = UnitOfWork();
+      var src = PartnerState(
+        vorname: "Reinhard",
+        nachname: "Höpner",
+        geschlecht: Geschlecht.maennlich
       );
-      partner.mutate(mut);
+      partner.mutate(uow, src);
       expect(partner.vorname, "Reinhard");
-      expect(partner.nachname, "");
-      expect(partner.geschlecht, Geschlecht.unbekannt);
+      expect(partner.nachname, "Höpner");
+      expect(partner.geschlecht, Geschlecht.maennlich);
     });
 
   });
