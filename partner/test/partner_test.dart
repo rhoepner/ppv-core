@@ -19,12 +19,11 @@ void main() {
 
     test('Change State', () {
       var uow = UnitOfWork();
-      var src = PartnerState(
+      partner.mutate(uow, PartnerState(
         vorname: "Reinhard",
         nachname: "Höpner",
         geschlecht: Geschlecht.maennlich
-      );
-      partner.mutate(uow, src);
+      ));
       expect(partner.vorname, "Reinhard");
       expect(partner.nachname, "Höpner");
       expect(partner.geschlecht, Geschlecht.maennlich);
@@ -34,12 +33,11 @@ void main() {
 
     test('Change State Twice', () {
       var uow = UnitOfWork();
-      var src = PartnerState(
+      partner.mutate(uow, PartnerState(
         vorname: "Reinhard",
         nachname: "Höpner",
         geschlecht: Geschlecht.maennlich
-      );
-      partner.mutate(uow, src);
+      ));
 
       partner.mutate(uow, PartnerState(
         vorname: "Reinhard",
@@ -54,12 +52,12 @@ void main() {
 
     test('No Change State', () {
       var uow = UnitOfWork();
-      var src = PartnerState(
+
+      partner.mutate(uow, PartnerState(
         vorname: "Reinhard",
         nachname: "Höpner",
         geschlecht: Geschlecht.maennlich
-      );
-      partner.mutate(uow, src);
+      ));
 
       partner.mutate(uow, PartnerState(
         vorname: "Reinhard",
