@@ -1,4 +1,5 @@
 
+import 'package:partner/src/addresse.dart';
 import 'package:partner/src/geschlecht.dart';
 import 'package:partner/src/spec.dart';
 import 'package:partner/src/unit_of_work.dart';
@@ -7,30 +8,22 @@ class Partner {
 
   static const StringValueSpec $vorname = StringValueSpec("vorname");
   static const StringValueSpec $nachname = StringValueSpec("nachname");
+  static const EnumValueSpec<Geschlecht> $geschlecht = EnumValueSpec<Geschlecht>("geschlecht");
 
-  String __vorname = '';
-  String __nachname = '';
-  Geschlecht __geschlecht = Geschlecht.unbekannt;
+  String _vorname = '';
+  String _nachname = '';
+  Geschlecht _geschlecht = Geschlecht.unbekannt;
+  final Map<AdressArt, Adresse> _adressen = {};
 
   Partner();
 
-  String get vorname => __vorname;
+  String get vorname => _vorname;
 
-  String get nachname => __nachname;
+  String get nachname => _nachname;
 
-  Geschlecht get geschlecht => __geschlecht;
+  Geschlecht get geschlecht => _geschlecht;
 
-  set _vorname(value) {
-    __vorname = value;
-  }
-
-  set _nachname(value) {
-    __nachname = value;
-  }
-
-  set _geschlecht(value) {
-    __geschlecht = value;
-  }
+  Map<AdressArt, Adresse> get adressen => _adressen;
 
   // factory Partner.fromJson(Map<String, dynamic> data) {
   //   var result = Partner()
@@ -53,7 +46,7 @@ class Partner {
 }
 
 abstract class PartnerSource with Source {
-  void mutate(UnitOfWork unitOfWork, Partner partner);
+  void mutate(UnitOfWork unitOfWork, Partner agg);
 }
 
 /// Mutation für die Basis-Daten eines Partners
@@ -69,13 +62,13 @@ class PartnerState extends PartnerSource {
   });
   
   @override
-  mutate(UnitOfWork unitOfWork, Partner aggregate) {
+  mutate(UnitOfWork unitOfWork, Partner agg) {
     Map<String, dynamic> delta = {};
-    aggregate._vorname = Partner.$vorname.mut(aggregate.__vorname, vorname, delta);
-    aggregate._nachname = Partner.$nachname.mut(aggregate.__nachname, nachname, delta);
-    if (geschlecht is Geschlecht) {
-      aggregate._geschlecht = geschlecht;
-    }
+    agg
+      .._vorname = Partner.$vorname.mut(agg._vorname, vorname, delta)
+      .._nachname = Partner.$nachname.mut(agg._nachname, nachname, delta)
+      .._geschlecht = Partner.$geschlecht.mut(agg._geschlecht, geschlecht, delta);
+
     if (delta.isNotEmpty) {
       delta["_source"] = sourceId();
       unitOfWork.add(delta);

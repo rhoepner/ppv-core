@@ -14,3 +14,20 @@ class StringValueSpec {
   }
 
 }
+
+class EnumValueSpec<T extends Enum> {
+  final String name;
+
+  const EnumValueSpec(this.name);
+
+  T mut(T currentValue, T? newValue, Map<String,dynamic> delta)  {
+    if (newValue != null) {
+      if (currentValue != newValue) {
+        delta[name] = newValue;
+        return newValue;
+      }
+    }
+    return currentValue;
+  }
+
+}
